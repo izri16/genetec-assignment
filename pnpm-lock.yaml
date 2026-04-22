@@ -41,6 +41,9 @@ importers:
       '@mantine/core':
         specifier: ^9.1.0
         version: 9.1.0(@mantine/hooks@9.1.0)(@types/react@19.2.14)(react-dom@19.2.5)(react@19.2.5)
+      '@tabler/icons-react':
+        specifier: ^3.41.1
+        version: 3.41.1(react@19.2.5)
       '@tanstack/react-query':
         specifier: ^5.99.2
         version: 5.99.2(react@19.2.5)

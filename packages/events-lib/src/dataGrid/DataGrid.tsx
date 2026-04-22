@@ -30,6 +30,8 @@ export interface DataGridProps<T> {
   loading?: boolean
   error?: ReactNode
   noRowsElement?: ReactNode
+  /** Called when a row is clicked. When set, rows gain a pointer cursor. */
+  onRowClick?: (row: T) => void
 }
 
 const DEFAULT_PAGE_SIZE = 20
@@ -42,6 +44,7 @@ export function DataGrid<T>({
   loading = false,
   error,
   noRowsElement,
+  onRowClick,
 }: DataGridProps<T>) {
   const { visibleColumns, isColumnVisible, toggleColumnVisibility } = useColumnVisibility(columns)
   const { filters, setFilter, clearAllFilters, filteredRows, hasActiveFilters } = useFilters(
@@ -138,7 +141,11 @@ export function DataGrid<T>({
           <Table.Tbody>
             {bodyState === 'ready' ? (
               pageRows.map((row) => (
-                <Table.Tr key={getRowId(row)}>
+                <Table.Tr
+                  key={getRowId(row)}
+                  onClick={onRowClick ? () => onRowClick(row) : undefined}
+                  style={onRowClick ? { cursor: 'pointer' } : undefined}
+                >
                   {visibleColumns.map((col) => (
                     <Table.Td
                       key={col.key}

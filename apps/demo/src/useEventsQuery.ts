@@ -1,23 +1,32 @@
 import { useQuery } from '@tanstack/react-query'
-import { MOCK_EVENTS, type Event } from './mockEvents'
+import { CATEGORY_EVENTS, type Category, type Event } from './mockEvents'
 
-export type FetchMode = 'fast' | 'slow' | 'error'
+// Each category simulates a different backend characteristic so the grid
+// exercises all of its states (fast / slow / error / empty) from real user
+// actions instead of artificial toggle buttons.
+const CATEGORY_DELAYS: Record<Category, number> = {
+  access: 300,
+  video: 2000,
+  alarms: 800,
+  network: 300,
+}
 
-const DELAYS: Record<FetchMode, number> = { fast: 300, slow: 2000, error: 800 }
-
-function fetchEvents(mode: FetchMode): Promise<Event[]> {
+function fetchEvents(category: Category): Promise<Event[]> {
   return new Promise((resolve, reject) => {
     window.setTimeout(() => {
-      if (mode === 'error') reject(new Error('Failed to load events. Please try again.'))
-      else resolve(MOCK_EVENTS)
-    }, DELAYS[mode])
+      if (category === 'alarms') {
+        reject(new Error('Failed to load events. Please try again.'))
+        return
+      }
+      resolve(CATEGORY_EVENTS[category])
+    }, CATEGORY_DELAYS[category])
   })
 }
 
-export function useEventsQuery(mode: FetchMode) {
+export function useEventsQuery(category: Category) {
   return useQuery({
-    queryKey: ['events', mode],
-    queryFn: () => fetchEvents(mode),
+    queryKey: ['events', category],
+    queryFn: () => fetchEvents(category),
     retry: false,
   })
 }

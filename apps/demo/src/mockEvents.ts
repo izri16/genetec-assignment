@@ -31,18 +31,28 @@ export const LOCATIONS = [
   'Quebec City',
 ] as const
 
-const NAME_PREFIXES = [
-  'Door forced open',
-  'Access denied',
-  'Tailgating detected',
-  'Badge read',
-  'Camera offline',
-  'Motion in restricted zone',
-  'Alarm acknowledged',
-  'Credential expired',
-  'Network latency spike',
-  'Firmware update applied',
-]
+const NAMES_BY_CATEGORY = {
+  access: [
+    'Door forced open',
+    'Access denied',
+    'Tailgating detected',
+    'Badge read',
+    'Credential expired',
+    'Visitor checked in',
+    'Cardholder added',
+    'Access granted',
+  ],
+  video: [
+    'Camera offline',
+    'Motion in restricted zone',
+    'Video feed lost',
+    'Object detected',
+    'PTZ preset recalled',
+    'Archive rotation completed',
+    'Stream buffering',
+    'Tamper alert',
+  ],
+} as const
 
 const TAG_POOL = ['access', 'video', 'network', 'badge', 'alarm', 'maintenance', 'audit']
 
@@ -60,7 +70,7 @@ function pickTags(seed: number): string[] {
   return [...result]
 }
 
-export function generateMockEvents(count: number): Event[] {
+export function generateMockEvents(count: number, names: readonly string[]): Event[] {
   const anchor = new Date('2026-04-22T12:00:00Z')
 
   return Array.from({ length: count }, (_, i) => {
@@ -69,7 +79,7 @@ export function generateMockEvents(count: number): Event[] {
     return {
       id: uuidv4(),
       createdAt,
-      name: `${pick(NAME_PREFIXES, i)} #${i + 1}`,
+      name: pick(names, i),
       location: pick(LOCATIONS, i),
       severity: i % SEVERITY_LABELS.length,
       tags: pickTags(i),
@@ -77,4 +87,19 @@ export function generateMockEvents(count: number): Event[] {
   })
 }
 
-export const MOCK_EVENTS: Event[] = generateMockEvents(250)
+export const CATEGORIES = ['access', 'video', 'alarms', 'network'] as const
+export type Category = (typeof CATEGORIES)[number]
+
+export const CATEGORY_LABELS: Record<Category, string> = {
+  access: 'Access',
+  video: 'Video',
+  alarms: 'Alarms',
+  network: 'Network',
+}
+
+export const CATEGORY_EVENTS: Record<Category, Event[]> = {
+  access: generateMockEvents(120, NAMES_BY_CATEGORY.access),
+  video: generateMockEvents(80, NAMES_BY_CATEGORY.video),
+  alarms: [],
+  network: [],
+}

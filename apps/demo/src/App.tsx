@@ -1,8 +1,26 @@
-import { Button, Container, Group, Stack, Title } from '@mantine/core'
+import {
+  Button,
+  Container,
+  Group,
+  Paper,
+  SegmentedControl,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core'
+import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
 import { DataGrid, type Column } from 'events-lib'
-import { LOCATIONS, SEVERITY_LABELS, severityLabel, type Event } from './mockEvents'
-import { useEventsQuery, type FetchMode } from './useEventsQuery'
+import {
+  CATEGORIES,
+  CATEGORY_LABELS,
+  LOCATIONS,
+  SEVERITY_LABELS,
+  severityLabel,
+  type Category,
+  type Event,
+} from './mockEvents'
+import { useEventsQuery } from './useEventsQuery'
 
 // Case-insensitive, deterministic string compare. Not locale-aware.
 const byString =
@@ -64,9 +82,18 @@ const columns: Column<Event>[] = [
   },
 ]
 
+type View = 'grid' | 'timeline'
+
+const CATEGORY_OPTIONS = CATEGORIES.map((c) => ({ value: c, label: CATEGORY_LABELS[c] }))
+const VIEW_OPTIONS = [
+  { value: 'grid', label: 'Grid' },
+  { value: 'timeline', label: 'Timeline' },
+]
+
 function App() {
-  const [mode, setMode] = useState<FetchMode>('fast')
-  const { data, isLoading, isFetching, isError, error, refetch } = useEventsQuery(mode)
+  const [category, setCategory] = useState<Category>('access')
+  const [view, setView] = useState<View>('grid')
+  const { data, isLoading, isFetching, isError, error, refetch } = useEventsQuery(category)
 
   // Suppress the error fallback while a retry is in flight — otherwise the
   // grid flickers between cached data and the error message.
@@ -82,24 +109,51 @@ function App() {
     </Stack>
   ) : undefined
 
+  const handleNewEvent = () => {
+    // TODO: open Add Event form
+  }
+
+  const handleRowClick = () => {
+    // TODO: open Edit Event form
+  }
+
   return (
     <Container size="xl" py="lg">
       <Stack gap="md">
-        <Title order={1}>Events</Title>
-        <Group>
-          <Button onClick={() => setMode('fast')}>Fast load</Button>
-          <Button onClick={() => setMode('slow')}>Slow load</Button>
-          <Button color="red" onClick={() => setMode('error')}>
-            Error
+        <Title order={1}>Event console</Title>
+        <Group justify="space-between" wrap="wrap">
+          <Group gap="sm">
+            <SegmentedControl
+              value={category}
+              onChange={(v) => setCategory(v as Category)}
+              data={CATEGORY_OPTIONS}
+            />
+            <SegmentedControl
+              value={view}
+              onChange={(v) => setView(v as View)}
+              data={VIEW_OPTIONS}
+            />
+          </Group>
+          <Button leftSection={<IconPlus size={16} />} onClick={handleNewEvent}>
+            New event
           </Button>
         </Group>
-        <DataGrid
-          rows={isRetrying ? [] : (data ?? [])}
-          columns={columns}
-          getRowId={(r) => r.id}
-          loading={isLoading || isRetrying}
-          error={errorElement}
-        />
+        {view === 'grid' ? (
+          <DataGrid
+            rows={isRetrying ? [] : (data ?? [])}
+            columns={columns}
+            getRowId={(r) => r.id}
+            loading={isLoading || isRetrying}
+            error={errorElement}
+            onRowClick={handleRowClick}
+          />
+        ) : (
+          <Paper withBorder p="xl">
+            <Text c="dimmed" ta="center">
+              Timeline view — coming soon
+            </Text>
+          </Paper>
+        )}
       </Stack>
     </Container>
   )
