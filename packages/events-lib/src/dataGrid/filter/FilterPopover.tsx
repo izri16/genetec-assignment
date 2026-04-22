@@ -82,4 +82,3 @@ export function FilterPopover<T>({ column, value, onChange }: FilterPopoverProps
     </Popover>
   )
 }
-
