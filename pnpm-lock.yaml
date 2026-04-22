@@ -17,6 +17,9 @@ dependencies:
   '@mantine/modals':
     specifier: ^9.1.0
     version: 9.1.0(@mantine/core@9.1.0)(@mantine/hooks@9.1.0)(react-dom@19.2.5)(react@19.2.5)
+  '@tanstack/react-query':
+    specifier: ^5.99.2
+    version: 5.99.2(react@19.2.5)
   date-fns:
     specifier: ^4.1.0
     version: 4.1.0
@@ -663,6 +666,19 @@ packages:
 
   /@standard-schema/spec@1.1.0:
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
+
+  /@tanstack/query-core@5.99.2:
+    resolution: {integrity: sha512-1HunU0bXVsR1ZJMZbcOPE6VtaBJxsW809RE9xPe4Gz7MlB0GWwQvuTPhMoEmQ/hIzFKJ/DWAuttIe7BOaWx0tA==}
+    dev: false
+
+  /@tanstack/react-query@5.99.2(react@19.2.5):
+    resolution: {integrity: sha512-vM91UEe45QUS9ED6OklsVL15i8qKcRqNwpWzPTVWvRPRSEgDudDgHpvyTjcdlwHcrKNa80T+xXYcchT2noPnZA==}
+    peerDependencies:
+      react: ^18 || ^19
+    dependencies:
+      '@tanstack/query-core': 5.99.2
+      react: 19.2.5
+    dev: false
 
   /@testing-library/dom@10.4.1:
     resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}

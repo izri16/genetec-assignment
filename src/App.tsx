@@ -1,6 +1,8 @@
-import { Container, Stack, Title } from '@mantine/core'
+import { Button, Container, Group, Stack, Title } from '@mantine/core'
+import { useState } from 'react'
 import { DataGrid, type Column } from './lib'
-import { LOCATIONS, MOCK_EVENTS, SEVERITIES, type Event } from './app/mockEvents'
+import { LOCATIONS, SEVERITIES, type Event } from './app/mockEvents'
+import { useEventsQuery, type FetchMode } from './app/useEventsQuery'
 
 const SEVERITY_RANK = Object.fromEntries(SEVERITIES.map((s, i) => [s, i])) as Record<
   Event['severity'],
@@ -67,11 +69,41 @@ const columns: Column<Event>[] = [
 ]
 
 function App() {
+  const [mode, setMode] = useState<FetchMode>('fast')
+  const { data, isLoading, isFetching, isError, error, refetch } = useEventsQuery(mode)
+
+  // Suppress the error fallback while a retry is in flight — otherwise the
+  // grid flickers between cached data and the error message.
+  const isRetrying = isError && isFetching
+  const showError = isError && !isRetrying
+
+  const errorElement = showError ? (
+    <Stack align="center" gap="xs">
+      <span>{error?.message}</span>
+      <Button size="xs" variant="light" onClick={() => refetch()}>
+        Retry
+      </Button>
+    </Stack>
+  ) : undefined
+
   return (
     <Container size="xl" py="lg">
       <Stack gap="md">
         <Title order={1}>Events</Title>
-        <DataGrid rows={MOCK_EVENTS} columns={columns} getRowId={(r) => r.id} />
+        <Group>
+          <Button onClick={() => setMode('fast')}>Fast load</Button>
+          <Button onClick={() => setMode('slow')}>Slow load</Button>
+          <Button color="red" onClick={() => setMode('error')}>
+            Error
+          </Button>
+        </Group>
+        <DataGrid
+          rows={isRetrying ? [] : (data ?? [])}
+          columns={columns}
+          getRowId={(r) => r.id}
+          loading={isLoading || isRetrying}
+          error={errorElement}
+        />
       </Stack>
     </Container>
   )
