@@ -19,26 +19,40 @@ const byString =
   }
 
 const columns: Column<Event>[] = [
-  { key: 'id', label: 'ID', accessor: (r) => r.id, compare: byString((r) => r.id) },
+  {
+    key: 'id',
+    label: 'ID',
+    accessor: (r) => r.id,
+    compare: byString((r) => r.id),
+    width: '25%',
+  },
   {
     key: 'createdAt',
     label: 'Created',
     accessor: (r) => new Date(r.createdAt).toLocaleString(),
     // ISO 8601 strings sort chronologically as plain strings.
     compare: byString((r) => r.createdAt),
+    width: 180,
   },
-  { key: 'name', label: 'Name', accessor: (r) => r.name, compare: byString((r) => r.name) },
+  {
+    key: 'name',
+    label: 'Name',
+    accessor: (r) => r.name,
+    compare: byString((r) => r.name),
+  },
   {
     key: 'location',
     label: 'Location',
     accessor: (r) => r.location,
     compare: byString((r) => r.location),
+    width: 140,
   },
   {
     key: 'severity',
     label: 'Severity',
     accessor: (r) => r.severity,
     compare: (a, b) => SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity],
+    width: 110,
   },
   { key: 'tags', label: 'Tags', accessor: (r) => r.tags.join(', ') },
 ]

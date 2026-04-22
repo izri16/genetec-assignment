@@ -35,7 +35,12 @@ export function DataGrid<T>({
 
   return (
     <Stack gap="sm">
-      <Table striped highlightOnHover withTableBorder withColumnBorders>
+      <Table striped highlightOnHover withTableBorder withColumnBorders layout="fixed">
+        <colgroup>
+          {columns.map((col) => (
+            <col key={col.key} style={col.width != null ? { width: col.width } : undefined} />
+          ))}
+        </colgroup>
         <Table.Thead>
           <Table.Tr>
             {columns.map((col) => (
@@ -52,7 +57,12 @@ export function DataGrid<T>({
           {pageRows.map((row) => (
             <Table.Tr key={getRowId(row)}>
               {columns.map((col) => (
-                <Table.Td key={col.key}>{col.accessor(row)}</Table.Td>
+                <Table.Td
+                  key={col.key}
+                  style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                >
+                  {col.accessor(row)}
+                </Table.Td>
               ))}
             </Table.Tr>
           ))}
