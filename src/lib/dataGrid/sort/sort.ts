@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { Column } from '../common'
 
 export type SortDirection = 'asc' | 'desc'
@@ -14,13 +14,13 @@ export interface SortState {
 export function useSort<T>(rows: readonly T[], columns: readonly Column<T>[]) {
   const [sortState, setSortState] = useState<SortState | null>(null)
 
-  const toggleSort = useCallback((key: string) => {
+  const toggleSort = (key: string) => {
     setSortState((prev) => {
       if (!prev || prev.key !== key) return { key, direction: 'asc' }
       if (prev.direction === 'asc') return { key, direction: 'desc' }
       return null
     })
-  }, [])
+  }
 
   const sortedRows = useMemo<readonly T[]>(() => {
     if (sortState == null) return rows
