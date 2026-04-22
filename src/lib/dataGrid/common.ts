@@ -11,4 +11,15 @@ export interface Column<T> {
    * Columns without a width share remaining space evenly (table-layout: fixed).
    */
   width?: string | number
+  /**
+   * Presence makes the column filterable. Returns the matchable string for
+   * the row. Text filters use case-insensitive substring match; Select
+   * filters (see `filterOptions`) use exact match.
+   */
+  filterOn?: (row: T) => string
+  /**
+   * If provided, the filter UI renders a Select of these values instead of
+   * a free-text input (exact match against the chosen option).
+   */
+  filterOptions?: readonly string[]
 }

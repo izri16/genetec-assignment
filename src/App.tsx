@@ -1,13 +1,11 @@
 import { Container, Stack, Title } from '@mantine/core'
 import { DataGrid, type Column } from './lib'
-import { MOCK_EVENTS, type Event } from './app/mockEvents'
+import { LOCATIONS, MOCK_EVENTS, SEVERITIES, type Event } from './app/mockEvents'
 
-const SEVERITY_RANK: Record<Event['severity'], number> = {
-  low: 0,
-  medium: 1,
-  high: 2,
-  critical: 3,
-}
+const SEVERITY_RANK = Object.fromEntries(SEVERITIES.map((s, i) => [s, i])) as Record<
+  Event['severity'],
+  number
+>
 
 // Case-insensitive, deterministic string compare. Not locale-aware.
 const byString =
@@ -25,6 +23,7 @@ const columns: Column<Event>[] = [
     accessor: (r) => r.id,
     compare: byString((r) => r.id),
     width: '25%',
+    filterOn: (r) => r.id,
   },
   {
     key: 'createdAt',
@@ -39,6 +38,7 @@ const columns: Column<Event>[] = [
     label: 'Name',
     accessor: (r) => r.name,
     compare: byString((r) => r.name),
+    filterOn: (r) => r.name,
   },
   {
     key: 'location',
@@ -46,6 +46,8 @@ const columns: Column<Event>[] = [
     accessor: (r) => r.location,
     compare: byString((r) => r.location),
     width: 140,
+    filterOn: (r) => r.location,
+    filterOptions: LOCATIONS,
   },
   {
     key: 'severity',
@@ -53,8 +55,15 @@ const columns: Column<Event>[] = [
     accessor: (r) => r.severity,
     compare: (a, b) => SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity],
     width: 110,
+    filterOn: (r) => r.severity,
+    filterOptions: SEVERITIES,
   },
-  { key: 'tags', label: 'Tags', accessor: (r) => r.tags.join(', ') },
+  {
+    key: 'tags',
+    label: 'Tags',
+    accessor: (r) => r.tags.join(', '),
+    filterOn: (r) => r.tags.join(' '),
+  },
 ]
 
 function App() {

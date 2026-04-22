@@ -10,22 +10,23 @@ import type { Event as _Event } from '../lib'
  * Deterministic: we seed from a simple counter so rows are stable across
  * reloads — easier to eyeball sort/filter behavior during development.
  */
+export const SEVERITIES = ['low', 'medium', 'high', 'critical'] as const
+export type Severity = (typeof SEVERITIES)[number]
+
 export interface Event extends _Event {
   location: string
-  severity: 'low' | 'medium' | 'high' | 'critical'
+  severity: Severity
   tags: string[]
 }
 
-const LOCATIONS = [
+export const LOCATIONS = [
   'Montreal HQ',
   'Toronto Office',
   'Vancouver Lab',
   'Ottawa DC',
   'Calgary Site',
   'Quebec City',
-]
-
-const SEVERITIES: Event['severity'][] = ['low', 'medium', 'high', 'critical']
+] as const
 
 const NAME_PREFIXES = [
   'Door forced open',

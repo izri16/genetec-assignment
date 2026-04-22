@@ -1,8 +1,8 @@
-import { Group, Pagination, Stack, Table, Text } from '@mantine/core'
+import { Button, Group, Pagination, Stack, Table, Text } from '@mantine/core'
 import { usePagination } from './pagination'
-import { useSort } from './sort'
+import { useSort, SortableHeader } from './sort'
+import { FilterPopover, useFilters } from './filter'
 import type { Column } from './common'
-import { SortableHeader } from './sort'
 
 export interface DataGridProps<T> {
   rows: readonly T[]
@@ -20,7 +20,11 @@ export function DataGrid<T>({
   getRowId,
   pageSize = DEFAULT_PAGE_SIZE,
 }: DataGridProps<T>) {
-  const { sortState, toggleSort, sortedRows } = useSort(rows, columns)
+  const { filters, setFilter, clearAllFilters, filteredRows, hasActiveFilters } = useFilters(
+    rows,
+    columns,
+  )
+  const { sortState, toggleSort, sortedRows } = useSort(filteredRows, columns)
   const { page, pageRows, rangeEnd, rangeStart, setPage, totalPages } = usePagination(
     sortedRows,
     pageSize,
@@ -35,6 +39,13 @@ export function DataGrid<T>({
 
   return (
     <Stack gap="sm">
+      {hasActiveFilters && (
+        <Group justify="flex-end">
+          <Button variant="subtle" size="xs" onClick={clearAllFilters}>
+            Clear all filters
+          </Button>
+        </Group>
+      )}
       <Table striped highlightOnHover withTableBorder withColumnBorders layout="fixed">
         <colgroup>
           {columns.map((col) => (
@@ -48,7 +59,16 @@ export function DataGrid<T>({
                 key={col.key}
                 column={col}
                 sortState={sortState}
-                onToggle={handleToggleSort}
+                onToggleSort={handleToggleSort}
+                endSlot={
+                  col.filterOn ? (
+                    <FilterPopover
+                      column={col}
+                      value={filters[col.key] ?? ''}
+                      onChange={(v) => setFilter(col.key, v)}
+                    />
+                  ) : null
+                }
               />
             ))}
           </Table.Tr>
@@ -70,7 +90,9 @@ export function DataGrid<T>({
       </Table>
       <Group justify="space-between">
         <Text size="sm" c="dimmed">
-          {rows.length === 0 ? 'No rows' : `Showing ${rangeStart}–${rangeEnd} of ${rows.length}`}
+          {sortedRows.length === 0
+            ? 'No rows'
+            : `Showing ${rangeStart}–${rangeEnd} of ${sortedRows.length}`}
         </Text>
         <Pagination value={page} onChange={setPage} total={totalPages} size="sm" withEdges />
       </Group>
