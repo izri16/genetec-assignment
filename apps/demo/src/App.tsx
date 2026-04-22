@@ -1,8 +1,8 @@
 import { Button, Container, Group, Stack, Title } from '@mantine/core'
 import { useState } from 'react'
-import { DataGrid, type Column } from './lib'
-import { LOCATIONS, SEVERITY_LABELS, severityLabel, type Event } from './app/mockEvents'
-import { useEventsQuery, type FetchMode } from './app/useEventsQuery'
+import { DataGrid, type Column } from 'events-lib'
+import { LOCATIONS, SEVERITY_LABELS, severityLabel, type Event } from './mockEvents'
+import { useEventsQuery, type FetchMode } from './useEventsQuery'
 
 // Case-insensitive, deterministic string compare. Not locale-aware.
 const byString =

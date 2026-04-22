@@ -1,6 +1,6 @@
 import { addHours, subDays } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
-import type { Event as _Event } from '../lib'
+import type { Event as _Event } from 'events-lib'
 
 /**
  * Mock dataset used to drive the demo. Lives in the app layer (not the lib)
