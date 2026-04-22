@@ -1,12 +1,8 @@
 import { Group, Pagination, Stack, Table, Text } from '@mantine/core'
-import { type ReactNode } from 'react'
 import { usePagination } from './pagination'
-
-export interface Column<T> {
-  key: string
-  label: string
-  accessor: (row: T) => ReactNode
-}
+import { useSort } from './sort'
+import type { Column } from './common'
+import { SortableHeader } from './sort'
 
 export interface DataGridProps<T> {
   rows: readonly T[]
@@ -24,10 +20,18 @@ export function DataGrid<T>({
   getRowId,
   pageSize = DEFAULT_PAGE_SIZE,
 }: DataGridProps<T>) {
+  const { sortState, toggleSort, sortedRows } = useSort(rows, columns)
   const { page, pageRows, rangeEnd, rangeStart, setPage, totalPages } = usePagination(
-    rows,
+    sortedRows,
     pageSize,
   )
+
+  // Sort doesn't change row count, so the length-based reset in usePagination
+  // won't fire. Reset explicitly so a sort change feels like a fresh view.
+  const handleToggleSort = (key: string) => {
+    toggleSort(key)
+    setPage(1)
+  }
 
   return (
     <Stack gap="sm">
@@ -35,7 +39,12 @@ export function DataGrid<T>({
         <Table.Thead>
           <Table.Tr>
             {columns.map((col) => (
-              <Table.Th key={col.key}>{col.label}</Table.Th>
+              <SortableHeader
+                key={col.key}
+                column={col}
+                sortState={sortState}
+                onToggle={handleToggleSort}
+              />
             ))}
           </Table.Tr>
         </Table.Thead>
