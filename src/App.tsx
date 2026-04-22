@@ -1,13 +1,8 @@
 import { Button, Container, Group, Stack, Title } from '@mantine/core'
 import { useState } from 'react'
 import { DataGrid, type Column } from './lib'
-import { LOCATIONS, SEVERITIES, type Event } from './app/mockEvents'
+import { LOCATIONS, SEVERITY_LABELS, severityLabel, type Event } from './app/mockEvents'
 import { useEventsQuery, type FetchMode } from './app/useEventsQuery'
-
-const SEVERITY_RANK = Object.fromEntries(SEVERITIES.map((s, i) => [s, i])) as Record<
-  Event['severity'],
-  number
->
 
 // Case-insensitive, deterministic string compare. Not locale-aware.
 const byString =
@@ -55,11 +50,11 @@ const columns: Column<Event>[] = [
   {
     key: 'severity',
     label: 'Severity',
-    accessor: (r) => r.severity,
-    compare: (a, b) => SEVERITY_RANK[a.severity] - SEVERITY_RANK[b.severity],
+    accessor: (r) => severityLabel(r.severity),
+    compare: (a, b) => a.severity - b.severity,
     width: 110,
-    filterOn: (r) => r.severity,
-    filterOptions: SEVERITIES,
+    filterOn: (r) => severityLabel(r.severity),
+    filterOptions: SEVERITY_LABELS,
   },
   {
     key: 'tags',

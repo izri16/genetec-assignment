@@ -10,14 +10,17 @@ import type { Event as _Event } from '../lib'
  * Deterministic: we seed from a simple counter so rows are stable across
  * reloads — easier to eyeball sort/filter behavior during development.
  */
-export const SEVERITIES = ['low', 'medium', 'high', 'critical'] as const
-export type Severity = (typeof SEVERITIES)[number]
+// Stored as an ordinal so sorting is just numeric compare. Labels live at the presentation layer.
+export const SEVERITY_LABELS = ['low', 'medium', 'high', 'critical'] as const
+export type SeverityLabel = (typeof SEVERITY_LABELS)[number]
 
 export interface Event extends _Event {
   location: string
-  severity: Severity
+  severity: number
   tags: string[]
 }
+
+export const severityLabel = (s: number): SeverityLabel => SEVERITY_LABELS[s]
 
 export const LOCATIONS = [
   'Montreal HQ',
@@ -68,7 +71,7 @@ export function generateMockEvents(count: number): Event[] {
       createdAt,
       name: `${pick(NAME_PREFIXES, i)} #${i + 1}`,
       location: pick(LOCATIONS, i),
-      severity: pick(SEVERITIES, i),
+      severity: i % SEVERITY_LABELS.length,
       tags: pickTags(i),
     }
   })
