@@ -1,4 +1,5 @@
 import { ActionIcon, Button, Popover, Select, Stack, TextInput } from '@mantine/core'
+import { IconFilter, IconFilterFilled } from '@tabler/icons-react'
 import { useState } from 'react'
 import type { Column } from '../common'
 
@@ -43,7 +44,7 @@ export function FilterPopover<T>({ column, value, onChange }: FilterPopoverProps
           aria-label={`Filter by ${column.label}`}
           aria-pressed={active}
         >
-          <FunnelIcon filled={active} />
+          {active ? <IconFilterFilled size={14} /> : <IconFilter size={14} stroke={1.8} />}
         </ActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
@@ -82,19 +83,3 @@ export function FilterPopover<T>({ column, value, onChange }: FilterPopoverProps
   )
 }
 
-function FunnelIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      width={12}
-      height={12}
-      fill={filled ? 'currentColor' : 'none'}
-      stroke="currentColor"
-      strokeWidth={1.4}
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M2 3h12l-4.5 6V14l-3 -1V9L2 3z" />
-    </svg>
-  )
-}

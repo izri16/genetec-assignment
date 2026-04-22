@@ -1,4 +1,5 @@
 import { Group, Table, UnstyledButton } from '@mantine/core'
+import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-react'
 import type { ReactNode } from 'react'
 import type { Column } from '../common'
 import type { SortState } from './sort'
@@ -31,8 +32,14 @@ export function SortableHeader<T>({
             style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 'inherit' }}
           >
             <span>{column.label}</span>
-            <span aria-hidden style={{ opacity: active ? 1 : 0.4 }}>
-              {active === 'asc' ? '▲' : active === 'desc' ? '▼' : '↕'}
+            <span style={{ display: 'inline-flex', opacity: active ? 1 : 0.4 }}>
+              {active === 'asc' ? (
+                <IconChevronUp size={14} stroke={2} />
+              ) : active === 'desc' ? (
+                <IconChevronDown size={14} stroke={2} />
+              ) : (
+                <IconSelector size={14} stroke={2} />
+              )}
             </span>
           </UnstyledButton>
         ) : (
