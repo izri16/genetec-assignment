@@ -14,6 +14,7 @@ import type { ReactNode } from 'react'
 import { usePagination } from './pagination'
 import { useSort, SortableHeader } from './sort'
 import { FilterPopover, useFilters } from './filter'
+import { ColumnVisibilityMenu, useColumnVisibility } from './columnVisibility'
 import type { Column } from './common'
 
 export interface DataGridProps<T> {
@@ -42,11 +43,12 @@ export function DataGrid<T>({
   error,
   noRowsElement,
 }: DataGridProps<T>) {
+  const { visibleColumns, isColumnVisible, toggleColumnVisibility } = useColumnVisibility(columns)
   const { filters, setFilter, clearAllFilters, filteredRows, hasActiveFilters } = useFilters(
     rows,
-    columns,
+    visibleColumns,
   )
-  const { sortState, toggleSort, sortedRows } = useSort(filteredRows, columns)
+  const { sortState, toggleSort, sortedRows } = useSort(filteredRows, visibleColumns)
   const { page, pageRows, rangeEnd, rangeStart, setPage, totalPages } = usePagination(
     sortedRows,
     pageSize,
@@ -87,13 +89,18 @@ export function DataGrid<T>({
 
   return (
     <Stack gap="sm">
-      {hasActiveFilters && (
-        <Group justify="flex-end">
+      <Group justify="flex-end" gap="xs">
+        {hasActiveFilters && (
           <Button variant="subtle" size="xs" onClick={clearAllFilters}>
             Clear all filters
           </Button>
-        </Group>
-      )}
+        )}
+        <ColumnVisibilityMenu
+          columns={columns}
+          isColumnVisible={isColumnVisible}
+          onToggleColumn={toggleColumnVisibility}
+        />
+      </Group>
       <Box pos="relative">
         <LoadingOverlay
           visible={loading && bodyState === 'ready'}
@@ -103,13 +110,13 @@ export function DataGrid<T>({
         />
         <Table striped highlightOnHover withTableBorder withColumnBorders layout="fixed">
           <colgroup>
-            {columns.map((col) => (
+            {visibleColumns.map((col) => (
               <col key={col.key} style={col.width != null ? { width: col.width } : undefined} />
             ))}
           </colgroup>
           <Table.Thead>
             <Table.Tr>
-              {columns.map((col) => (
+              {visibleColumns.map((col) => (
                 <SortableHeader
                   key={col.key}
                   column={col}
@@ -132,7 +139,7 @@ export function DataGrid<T>({
             {bodyState === 'ready' ? (
               pageRows.map((row) => (
                 <Table.Tr key={getRowId(row)}>
-                  {columns.map((col) => (
+                  {visibleColumns.map((col) => (
                     <Table.Td
                       key={col.key}
                       style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
@@ -144,7 +151,7 @@ export function DataGrid<T>({
               ))
             ) : (
               <Table.Tr>
-                <Table.Td colSpan={columns.length}>{fallbackContent}</Table.Td>
+                <Table.Td colSpan={Math.max(visibleColumns.length, 1)}>{fallbackContent}</Table.Td>
               </Table.Tr>
             )}
           </Table.Tbody>

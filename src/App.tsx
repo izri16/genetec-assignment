@@ -26,6 +26,7 @@ const columns: Column<Event>[] = [
     compare: byString((r) => r.id),
     width: '25%',
     filterOn: (r) => r.id,
+    hideable: false,
   },
   {
     key: 'createdAt',

@@ -22,4 +22,8 @@ export interface Column<T> {
    * a free-text input (exact match against the chosen option).
    */
   filterOptions?: readonly string[]
+  /**
+   * When false, the column cannot be hidden via the visibility menu.
+   */
+  hideable?: boolean
 }
