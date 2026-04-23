@@ -46,7 +46,6 @@ export function ColumnVisibilityMenu<T>({
             aria-label={
               hasHiddenColumns ? `Configure columns (${hiddenCount} hidden)` : 'Configure columns'
             }
-            aria-pressed={hasHiddenColumns}
           >
             <IconSettings size={16} stroke={1.8} />
           </ActionIcon>

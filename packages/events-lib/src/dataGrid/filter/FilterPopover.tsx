@@ -43,7 +43,6 @@ export function FilterPopover<T>({ column, value, onChange }: FilterPopoverProps
           color={active ? undefined : 'gray'}
           onClick={handleToggleOpen}
           aria-label={`Filter by ${column.label}`}
-          aria-pressed={active}
           className={classes.trigger}
           data-active={active || undefined}
         >
