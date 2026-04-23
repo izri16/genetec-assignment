@@ -1,0 +1,31 @@
+.root {
+  height: 100%;
+  min-height: 0;
+}
+
+.fallback {
+  flex: 1;
+}
+
+.scroll {
+  display: flex;
+  gap: var(--mantine-spacing-sm);
+  overflow: auto;
+  align-items: flex-start;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: 4px;
+}
+
+.column {
+  flex: 1;
+  min-width: 0;
+}
+
+.dayHeader {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--mantine-color-body);
+  padding-bottom: 4px;
+}

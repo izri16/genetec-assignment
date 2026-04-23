@@ -1,0 +1,15 @@
+.card {
+  position: relative;
+  /* Leaves room for the sticky day header when scrollIntoView targets a card
+     near the top — otherwise it lands under the header. */
+  scroll-margin-top: 40px;
+}
+
+.card[data-clickable='true'] {
+  cursor: pointer;
+}
+
+.card[data-focused='true'] {
+  background: var(--mantine-color-blue-light);
+  border-color: var(--mantine-color-blue-filled);
+}

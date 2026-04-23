@@ -53,7 +53,7 @@ export function ColumnVisibilityMenu<T>({
         </Group>
       </Popover.Target>
       <Popover.Dropdown>
-        <Stack gap="xs" style={{ minWidth: 180 }}>
+        <Stack gap="xs" miw={180}>
           {columns.map((col) => (
             <Checkbox
               key={col.key}

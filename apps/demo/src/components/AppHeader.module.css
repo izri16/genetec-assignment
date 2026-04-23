@@ -12,4 +12,5 @@
 .badge {
   letter-spacing: 0.6px;
   margin-top: 4px;
+  align-self: center;
 }

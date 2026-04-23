@@ -2,8 +2,7 @@ import { ActionIcon, Box, Stack, Text } from '@mantine/core'
 import { IconPencil } from '@tabler/icons-react'
 import { type Event } from './common'
 import { SeverityBadge } from './SeverityBadge'
-
-const truncate = { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } as const
+import classes from './TimelineEventCard.module.css'
 
 interface Props {
   event: Event
@@ -13,14 +12,14 @@ interface Props {
 export function TimelineEventCard({ event, onEdit }: Props) {
   return (
     <>
-      <Stack gap={4} style={{ paddingRight: 20 }}>
-        <Text size="sm" fw={600} style={truncate}>
+      <Stack gap={4} className={classes.body}>
+        <Text size="sm" fw={600} className={classes.truncate}>
           {event.name}
         </Text>
-        <Text size="xs" c="dimmed" style={truncate}>
+        <Text size="xs" c="dimmed" className={classes.truncate}>
           {event.location}
         </Text>
-        <Box style={{ alignSelf: 'flex-start' }}>
+        <Box className={classes.severity}>
           <SeverityBadge severity={event.severity} />
         </Box>
       </Stack>
@@ -33,7 +32,7 @@ export function TimelineEventCard({ event, onEdit }: Props) {
           ev.stopPropagation()
           onEdit(event)
         }}
-        style={{ position: 'absolute', top: 4, right: 4 }}
+        className={classes.edit}
       >
         <IconPencil size={12} />
       </ActionIcon>

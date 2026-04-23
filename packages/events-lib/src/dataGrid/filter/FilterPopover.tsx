@@ -2,6 +2,7 @@ import { ActionIcon, Button, Popover, Select, Stack, TextInput } from '@mantine/
 import { IconFilter, IconFilterFilled } from '@tabler/icons-react'
 import { useState } from 'react'
 import type { Column } from '../common'
+import classes from './FilterPopover.module.css'
 
 interface FilterPopoverProps<T> {
   column: Column<T>
@@ -43,13 +44,14 @@ export function FilterPopover<T>({ column, value, onChange }: FilterPopoverProps
           onClick={handleToggleOpen}
           aria-label={`Filter by ${column.label}`}
           aria-pressed={active}
-          style={{ opacity: active ? 1 : 0.4 }}
+          className={classes.trigger}
+          data-active={active || undefined}
         >
           {active ? <IconFilterFilled size={14} /> : <IconFilter size={14} stroke={1.8} />}
         </ActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
-        <Stack gap="xs" style={{ minWidth: 200 }}>
+        <Stack gap="xs" miw={200}>
           {column.filterOptions ? (
             <Select
               data={column.filterOptions as string[]}

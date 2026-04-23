@@ -1,0 +1,15 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: inherit;
+}
+
+.icon {
+  display: inline-flex;
+  opacity: 0.4;
+}
+
+.icon[data-active='true'] {
+  opacity: 1;
+}

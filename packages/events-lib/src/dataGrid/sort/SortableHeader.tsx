@@ -3,6 +3,7 @@ import { IconChevronDown, IconChevronUp, IconSelector } from '@tabler/icons-reac
 import type { ReactNode } from 'react'
 import type { Column } from '../common'
 import type { SortState } from './sort'
+import classes from './SortableHeader.module.css'
 
 interface SortableHeaderProps<T> {
   column: Column<T>
@@ -29,10 +30,10 @@ export function SortableHeader<T>({
           <UnstyledButton
             onClick={() => onToggleSort(column.key)}
             aria-label={`Sort by ${column.label}`}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontWeight: 'inherit' }}
+            className={classes.button}
           >
             <span>{column.label}</span>
-            <span style={{ display: 'inline-flex', opacity: active ? 1 : 0.4 }}>
+            <span className={classes.icon} data-active={active ? true : undefined}>
               {active === 'asc' ? (
                 <IconChevronUp size={14} stroke={2} />
               ) : active === 'desc' ? (

@@ -1,5 +1,6 @@
 import { Paper } from '@mantine/core'
 import type { ReactNode } from 'react'
+import classes from './EventCard.module.css'
 
 interface Props {
   isFocused: boolean
@@ -13,16 +14,9 @@ export function EventCard({ isFocused, onClick, children }: Props) {
       withBorder
       p="xs"
       onClick={onClick}
+      className={classes.card}
+      data-clickable={onClick ? true : undefined}
       data-focused={isFocused || undefined}
-      style={{
-        position: 'relative',
-        cursor: onClick ? 'pointer' : undefined,
-        background: isFocused ? 'var(--mantine-color-blue-light)' : undefined,
-        borderColor: isFocused ? 'var(--mantine-color-blue-filled)' : undefined,
-        // Leaves room for the sticky day header when scrollIntoView targets
-        // a card near the top — otherwise it lands under the header.
-        scrollMarginTop: 40,
-      }}
     >
       {children}
     </Paper>

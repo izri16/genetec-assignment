@@ -1,0 +1,7 @@
+.trigger {
+  opacity: 0.4;
+}
+
+.trigger[data-active='true'] {
+  opacity: 1;
+}

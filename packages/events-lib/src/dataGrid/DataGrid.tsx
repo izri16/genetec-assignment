@@ -16,6 +16,7 @@ import { useSort, SortableHeader } from './sort'
 import { FilterPopover, useFilters } from './filter'
 import { ColumnVisibilityMenu, useColumnVisibility } from './columnVisibility'
 import type { Column } from './common'
+import classes from './DataGrid.module.css'
 
 export interface DataGridProps<T> {
   rows: readonly T[]
@@ -87,7 +88,7 @@ export function DataGrid<T>({
     ) : null
 
   return (
-    <Stack gap="sm" h="100%" style={{ minHeight: 0 }}>
+    <Stack gap="sm" className={classes.root}>
       <Group justify="space-between" gap="xs" wrap="nowrap">
         <Box>{toolbar}</Box>
         <Group gap="xs" wrap="nowrap">
@@ -103,16 +104,7 @@ export function DataGrid<T>({
           />
         </Group>
       </Group>
-      <Box
-        pos="relative"
-        style={{
-          flex: 1,
-          minHeight: 0,
-          overflow: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <Box pos="relative" className={classes.scroll}>
         <LoadingOverlay
           visible={loading && bodyState === 'ready'}
           zIndex={1}
@@ -160,13 +152,11 @@ export function DataGrid<T>({
                 <Table.Tr
                   key={getRowId(row)}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
-                  style={onRowClick ? { cursor: 'pointer' } : undefined}
+                  className={classes.row}
+                  data-clickable={onRowClick ? true : undefined}
                 >
                   {visibleColumns.map((col) => (
-                    <Table.Td
-                      key={col.key}
-                      style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                    >
+                    <Table.Td key={col.key} className={classes.cell}>
                       {col.accessor(row)}
                     </Table.Td>
                   ))}
@@ -175,7 +165,7 @@ export function DataGrid<T>({
             </Table.Tbody>
           )}
         </Table>
-        {bodyState !== 'ready' && <Center style={{ flex: 1 }}>{fallbackContent}</Center>}
+        {bodyState !== 'ready' && <Center className={classes.fallback}>{fallbackContent}</Center>}
       </Box>
       {bodyState === 'ready' && (
         <Group justify="space-between">

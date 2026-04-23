@@ -17,15 +17,7 @@ export function AppHeader({ title, badge }: AppHeaderProps) {
         {title}
       </Title>
       {badge && (
-        <Text
-          size="xs"
-          c="dimmed"
-          fw={600}
-          tt="uppercase"
-          lh={1}
-          className={classes.badge}
-          style={{ alignSelf: 'center' }}
-        >
+        <Text size="xs" c="dimmed" fw={600} tt="uppercase" lh={1} className={classes.badge}>
           {badge}
         </Text>
       )}

@@ -1,0 +1,20 @@
+/* Leaves room for the absolute-positioned edit icon so text never overlaps. */
+.body {
+  padding-right: 20px;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.severity {
+  align-self: flex-start;
+}
+
+.edit {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}

@@ -5,6 +5,7 @@ import { EventCard } from './EventCard'
 import { groupEventsByDay } from './grouping'
 import { useTimelineNavigation } from './navigation'
 import { ScreenReaderAnnouncement } from './ScreenReaderAnnouncement'
+import classes from './Timeline.module.css'
 
 export interface TimelineEvent {
   date: Date | string
@@ -68,48 +69,28 @@ export function Timeline<T extends TimelineEvent>({
   let body: ReactNode
   if (error) {
     body = (
-      <Center style={{ flex: 1 }} c="red">
+      <Center className={classes.fallback} c="red">
         {error}
       </Center>
     )
   } else if (loading && events.length === 0) {
     body = (
-      <Center style={{ flex: 1 }}>
+      <Center className={classes.fallback}>
         <Loader size="sm" />
       </Center>
     )
   } else if (days.length === 0) {
     body = (
-      <Center style={{ flex: 1 }}>
+      <Center className={classes.fallback}>
         <Text c="dimmed">{noEventsElement ?? 'No events'}</Text>
       </Center>
     )
   } else {
     body = (
-      <Box
-        ref={scrollRef}
-        aria-label="Events by day"
-        style={{
-          display: 'flex',
-          gap: 'var(--mantine-spacing-sm)',
-          overflow: 'auto',
-          alignItems: 'flex-start',
-          flex: 1,
-          minHeight: 0,
-          paddingBottom: 4,
-        }}
-      >
+      <Box ref={scrollRef} aria-label="Events by day" className={classes.scroll}>
         {days.map((day, dayIdx) => (
-          <Stack key={day.date.getTime()} gap="xs" style={{ flex: 1, minWidth: 0 }}>
-            <Box
-              style={{
-                position: 'sticky',
-                top: 0,
-                zIndex: 1,
-                background: 'var(--mantine-color-body)',
-                paddingBottom: 4,
-              }}
-            >
+          <Stack key={day.date.getTime()} gap="xs" className={classes.column}>
+            <Box className={classes.dayHeader}>
               <Group justify="space-between" align="center" wrap="nowrap" gap="xs">
                 <Text fw={500} size="sm" truncate>
                   {formatDayHeader(day.date)}
@@ -138,7 +119,7 @@ export function Timeline<T extends TimelineEvent>({
   }
 
   return (
-    <Stack gap="sm" h="100%" style={{ minHeight: 0 }}>
+    <Stack gap="sm" className={classes.root}>
       <ScreenReaderAnnouncement
         focusedDay={focusedDay}
         focusedEvent={focusedEvent}

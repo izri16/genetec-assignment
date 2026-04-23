@@ -1,6 +1,7 @@
 import { MultiSelect, Select, Textarea, TextInput } from '@mantine/core'
 import type { GetInputPropsReturnType } from '@mantine/form'
 import type { FormField } from './fields'
+import classes from './FieldInput.module.css'
 
 interface FieldInputProps<T> {
   field: FormField<T>
@@ -12,7 +13,7 @@ export function FieldInput<T>({ field, inputProps }: FieldInputProps<T>) {
     field.label
   ) : (
     <>
-      {field.label} <span style={{ color: 'var(--mantine-color-dimmed)' }}>(optional)</span>
+      {field.label} <span className={classes.optional}>(optional)</span>
     </>
   )
   const common = {
