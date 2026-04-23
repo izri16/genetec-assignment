@@ -50,9 +50,10 @@ export function Timeline<T extends TimelineEvent>({
   const focusedDay = days[focusPosition.dayIndex]
   const focusedEvent = focusedDay?.events[focusPosition.eventIndex]
 
-  // Clicking the "Timeline" SegmentedControl leaves that radio focused; its
-  // native ←/→ would flip back to the Grid tab. Drop focus on mount so the
-  // ambient arrow handling takes over immediately.
+  // Our arrow-key handler only fires when nothing is focused (see
+  // useTimelineNavigation). Clicking the Timeline tab leaves the
+  // SegmentedControl focused, which would block it — so drop focus on mount.
+  // Trade-off: this also blurs focus for users who arrived via Tab.
   useEffect(() => {
     const el = document.activeElement as HTMLElement | null
     el?.blur?.()
