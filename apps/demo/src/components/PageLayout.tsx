@@ -14,10 +14,12 @@ interface PageLayoutProps {
 export function PageLayout({ header, toolbar, children }: PageLayoutProps) {
   return (
     <Container size="xl" py="lg" className={classes.root}>
-      <Stack gap="md" className={classes.body}>
+      <Stack gap={0} className={classes.body}>
         {header}
-        {toolbar}
-        <Box className={classes.content}>{children}</Box>
+        {toolbar && <Box mt="xl">{toolbar}</Box>}
+        <Box className={classes.content} mt="sm">
+          {children}
+        </Box>
       </Stack>
     </Container>
   )

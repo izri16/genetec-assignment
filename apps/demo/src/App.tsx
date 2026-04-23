@@ -88,18 +88,24 @@ function App() {
 
   const toolbar = (
     <Group justify="space-between" wrap="wrap">
-      <Group gap="sm">
-        <SegmentedControl
-          value={category}
-          onChange={(v) => setCategory(v as Category)}
-          data={CATEGORY_OPTIONS}
-        />
-        <SegmentedControl value={view} onChange={(v) => setView(v as View)} data={VIEW_OPTIONS} />
-      </Group>
+      <SegmentedControl
+        value={category}
+        onChange={(v) => setCategory(v as Category)}
+        data={CATEGORY_OPTIONS}
+      />
       <Button leftSection={<IconPlus size={16} />} onClick={handleNewEvent}>
         New event
       </Button>
     </Group>
+  )
+
+  const viewSwitcher = (
+    <SegmentedControl
+      value={view}
+      onChange={(v) => setView(v as View)}
+      data={VIEW_OPTIONS}
+      size="xs"
+    />
   )
 
   return (
@@ -112,6 +118,7 @@ function App() {
           loading={isLoading || isRetrying}
           error={errorElement}
           onRowClick={handleRowClick}
+          toolbar={viewSwitcher}
         />
       ) : (
         <Timeline
@@ -122,6 +129,7 @@ function App() {
           loading={isLoading || isRetrying}
           error={errorElement}
           onEventClick={handleRowClick}
+          toolbar={viewSwitcher}
         />
       )}
       {formOpen && (

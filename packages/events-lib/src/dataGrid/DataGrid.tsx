@@ -32,6 +32,7 @@ export interface DataGridProps<T> {
   noRowsElement?: ReactNode
   /** Called when a row is clicked. When set, rows gain a pointer cursor. */
   onRowClick?: (row: T) => void
+  toolbar?: ReactNode
 }
 
 const DEFAULT_PAGE_SIZE = 20
@@ -45,6 +46,7 @@ export function DataGrid<T>({
   error,
   noRowsElement,
   onRowClick,
+  toolbar,
 }: DataGridProps<T>) {
   const { visibleColumns, isColumnVisible, toggleColumnVisibility } = useColumnVisibility(columns)
   const { filters, setFilter, clearAllFilters, filteredRows, hasActiveFilters } = useFilters(
@@ -92,17 +94,20 @@ export function DataGrid<T>({
 
   return (
     <Stack gap="sm" h="100%" style={{ minHeight: 0 }}>
-      <Group justify="flex-end" gap="xs">
-        {hasActiveFilters && (
-          <Button variant="subtle" size="xs" onClick={clearAllFilters}>
-            Clear all filters
-          </Button>
-        )}
-        <ColumnVisibilityMenu
-          columns={columns}
-          isColumnVisible={isColumnVisible}
-          onToggleColumn={toggleColumnVisibility}
-        />
+      <Group justify="space-between" gap="xs" wrap="nowrap">
+        <Box>{toolbar}</Box>
+        <Group gap="xs" wrap="nowrap">
+          {hasActiveFilters && (
+            <Button variant="subtle" size="xs" onClick={clearAllFilters}>
+              Clear all filters
+            </Button>
+          )}
+          <ColumnVisibilityMenu
+            columns={columns}
+            isColumnVisible={isColumnVisible}
+            onToggleColumn={toggleColumnVisibility}
+          />
+        </Group>
       </Group>
       <Box pos="relative" style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
         <LoadingOverlay

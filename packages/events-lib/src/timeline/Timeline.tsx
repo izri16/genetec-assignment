@@ -20,6 +20,7 @@ export interface TimelineProps<T extends TimelineEvent> {
   error?: ReactNode
   noEventsElement?: ReactNode
   onEventClick?: (event: T) => void
+  toolbar?: ReactNode
 }
 
 const formatDayHeader = (d: Date): string =>
@@ -35,6 +36,7 @@ export function Timeline<T extends TimelineEvent>({
   error,
   noEventsElement,
   onEventClick,
+  toolbar,
 }: TimelineProps<T>) {
   const eventsByDay = useMemo(() => groupEventsByDay(events), [events])
   const { pageRows: days, page, setPage, totalPages } = usePagination(eventsByDay, daysPerPage)
@@ -142,7 +144,8 @@ export function Timeline<T extends TimelineEvent>({
         page={page}
         totalPages={totalPages}
       />
-      <Group justify="flex-end" align="center">
+      <Group justify="space-between" align="center" wrap="nowrap">
+        <Box>{toolbar}</Box>
         <Text size="xs" c="dimmed">
           Use ← → ↑ ↓ to navigate
         </Text>
