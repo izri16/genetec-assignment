@@ -24,8 +24,8 @@ import {
   type Category,
   type Event,
   type SeverityLabel,
-} from './mockEvents'
-import { useEventsQuery, useUpsertEventMutation } from './useEventsQuery'
+} from './features/events'
+import { useEventsQuery, useUpsertEventMutation } from './features/events'
 
 // Case-insensitive, deterministic string compare. Not locale-aware.
 const byString =
