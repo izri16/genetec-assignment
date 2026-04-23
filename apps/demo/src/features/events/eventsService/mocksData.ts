@@ -39,11 +39,16 @@ function pickTags(seed: number): string[] {
   return [...result]
 }
 
+// Sparse day offsets — skipping days (2, 5, 6, 10…) so the timeline has
+// empty-day columns to exercise gap rendering.
+const DAY_OFFSETS = [0, 1, 3, 4, 7, 8, 9, 11, 13, 14, 17, 19, 20, 23, 27, 28, 32, 35, 40, 44]
+
 export function generateMockEvents(count: number, names: readonly string[]): Event[] {
   const anchor = new Date('2026-04-22T12:00:00Z')
 
   return Array.from({ length: count }, (_, i) => {
-    const createdAt = addHours(subDays(anchor, i % 45), i % 24).toISOString()
+    const dayOffset = DAY_OFFSETS[i % DAY_OFFSETS.length]
+    const createdAt = addHours(subDays(anchor, dayOffset), i % 24).toISOString()
 
     return {
       id: uuidv4(),

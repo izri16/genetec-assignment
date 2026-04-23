@@ -1,7 +1,7 @@
-import { Button, Group, Paper, SegmentedControl, Stack, Text } from '@mantine/core'
+import { Button, Group, SegmentedControl, Stack, Text } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
-import { DataGrid, UpsertEventForm } from 'events-lib'
+import { DataGrid, Timeline, UpsertEventForm } from 'events-lib'
 import { AppHeader } from './components/AppHeader'
 import { PageLayout } from './components/PageLayout'
 import {
@@ -12,12 +12,32 @@ import {
   eventFormFields,
   eventToForm,
   formToEvent,
+  severityLabel,
   useEventsQuery,
   useUpsertEventMutation,
   type Category,
   type Event,
   type EventFormValues,
 } from './features/events'
+
+const truncate = { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } as const
+
+const renderEventCard = (e: Event) => (
+  <Stack gap={2}>
+    <Text size="sm" fw={600} style={truncate}>
+      {e.name}
+    </Text>
+    <Text size="xs" c="dimmed" style={truncate}>
+      {e.location}
+    </Text>
+    <Text size="xs" c="dimmed" style={truncate}>
+      {severityLabel(e.severity)}
+    </Text>
+    <Text size="xs" c="dimmed" style={truncate}>
+      {e.tags.join(', ')}
+    </Text>
+  </Stack>
+)
 
 type View = 'grid' | 'timeline'
 
@@ -94,11 +114,15 @@ function App() {
           onRowClick={handleRowClick}
         />
       ) : (
-        <Paper withBorder p="xl" style={{ flex: 1 }}>
-          <Text c="dimmed" ta="center">
-            Timeline view — coming soon
-          </Text>
-        </Paper>
+        <Timeline
+          events={(isRetrying ? [] : (data ?? [])).map((e) => ({ ...e, date: e.createdAt }))}
+          getEventId={(e) => e.id}
+          getEventLabel={(e) => e.name}
+          renderEvent={renderEventCard}
+          loading={isLoading || isRetrying}
+          error={errorElement}
+          onEventClick={handleRowClick}
+        />
       )}
       {formOpen && (
         <UpsertEventForm
