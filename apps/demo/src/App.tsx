@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Container,
   Group,
@@ -186,8 +187,8 @@ function App() {
   }
 
   return (
-    <Container size="xl" py="lg">
-      <Stack gap="md">
+    <Container size="xl" py="lg" h="100%" style={{ display: 'flex', flexDirection: 'column' }}>
+      <Stack gap="md" style={{ flex: 1, minHeight: 0 }}>
         <Title order={1}>Event console</Title>
         <Group justify="space-between" wrap="wrap">
           <Group gap="sm">
@@ -206,22 +207,24 @@ function App() {
             New event
           </Button>
         </Group>
-        {view === 'grid' ? (
-          <DataGrid
-            rows={isRetrying ? [] : (data ?? [])}
-            columns={columns}
-            getRowId={(r) => r.id}
-            loading={isLoading || isRetrying}
-            error={errorElement}
-            onRowClick={handleRowClick}
-          />
-        ) : (
-          <Paper withBorder p="xl">
-            <Text c="dimmed" ta="center">
-              Timeline view — coming soon
-            </Text>
-          </Paper>
-        )}
+        <Box style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+          {view === 'grid' ? (
+            <DataGrid
+              rows={isRetrying ? [] : (data ?? [])}
+              columns={columns}
+              getRowId={(r) => r.id}
+              loading={isLoading || isRetrying}
+              error={errorElement}
+              onRowClick={handleRowClick}
+            />
+          ) : (
+            <Paper withBorder p="xl" style={{ flex: 1 }}>
+              <Text c="dimmed" ta="center">
+                Timeline view — coming soon
+              </Text>
+            </Paper>
+          )}
+        </Box>
       </Stack>
       {formOpen && (
         <UpsertEventForm

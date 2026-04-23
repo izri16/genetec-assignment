@@ -91,7 +91,7 @@ export function DataGrid<T>({
     ) : null
 
   return (
-    <Stack gap="sm">
+    <Stack gap="sm" h="100%" style={{ minHeight: 0 }}>
       <Group justify="flex-end" gap="xs">
         {hasActiveFilters && (
           <Button variant="subtle" size="xs" onClick={clearAllFilters}>
@@ -104,14 +104,14 @@ export function DataGrid<T>({
           onToggleColumn={toggleColumnVisibility}
         />
       </Group>
-      <Box pos="relative">
+      <Box pos="relative" style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
         <LoadingOverlay
           visible={loading && bodyState === 'ready'}
           zIndex={1}
           overlayProps={{ backgroundOpacity: 0.15 }}
           loaderProps={{ size: 'sm' }}
         />
-        <Table striped highlightOnHover withTableBorder withColumnBorders layout="fixed">
+        <Table striped highlightOnHover withTableBorder withColumnBorders layout="fixed" miw={900}>
           <colgroup>
             {visibleColumns.map((col) => (
               <col key={col.key} style={col.width != null ? { width: col.width } : undefined} />
