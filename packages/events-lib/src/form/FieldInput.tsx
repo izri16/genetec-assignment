@@ -8,9 +8,15 @@ interface FieldInputProps<T> {
 }
 
 export function FieldInput<T>({ field, inputProps }: FieldInputProps<T>) {
+  const label = field.required ? (
+    field.label
+  ) : (
+    <>
+      {field.label} <span style={{ color: 'var(--mantine-color-dimmed)' }}>(optional)</span>
+    </>
+  )
   const common = {
-    label: field.label,
-    required: field.required,
+    label,
     placeholder: field.placeholder,
     name: field.key,
   }

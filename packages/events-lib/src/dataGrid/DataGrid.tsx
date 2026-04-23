@@ -79,17 +79,11 @@ export function DataGrid<T>({
 
   const fallbackContent =
     bodyState === 'loading' ? (
-      <Center py="xl">
-        <Loader size="sm" />
-      </Center>
+      <Loader size="sm" />
     ) : bodyState === 'error' ? (
-      <Center py="xl" c="red">
-        {error}
-      </Center>
+      <Text c="red">{error}</Text>
     ) : bodyState === 'empty' ? (
-      <Center py="xl">
-        <Text c="dimmed">{noRowsElement ?? 'No rows'}</Text>
-      </Center>
+      <Text c="dimmed">{noRowsElement ?? 'No rows'}</Text>
     ) : null
 
   return (
@@ -98,7 +92,7 @@ export function DataGrid<T>({
         <Box>{toolbar}</Box>
         <Group gap="xs" wrap="nowrap">
           {hasActiveFilters && (
-            <Button variant="subtle" size="xs" onClick={clearAllFilters}>
+            <Button variant="subtle" color="gray" size="xs" onClick={clearAllFilters}>
               Clear all filters
             </Button>
           )}
@@ -109,7 +103,16 @@ export function DataGrid<T>({
           />
         </Group>
       </Group>
-      <Box pos="relative" style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
+      <Box
+        pos="relative"
+        style={{
+          flex: 1,
+          minHeight: 0,
+          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <LoadingOverlay
           visible={loading && bodyState === 'ready'}
           zIndex={1}
@@ -151,9 +154,9 @@ export function DataGrid<T>({
               ))}
             </Table.Tr>
           </Table.Thead>
-          <Table.Tbody>
-            {bodyState === 'ready' ? (
-              pageRows.map((row) => (
+          {bodyState === 'ready' && (
+            <Table.Tbody>
+              {pageRows.map((row) => (
                 <Table.Tr
                   key={getRowId(row)}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
@@ -168,14 +171,13 @@ export function DataGrid<T>({
                     </Table.Td>
                   ))}
                 </Table.Tr>
-              ))
-            ) : (
-              <Table.Tr>
-                <Table.Td colSpan={Math.max(visibleColumns.length, 1)}>{fallbackContent}</Table.Td>
-              </Table.Tr>
-            )}
-          </Table.Tbody>
+              ))}
+            </Table.Tbody>
+          )}
         </Table>
+        {bodyState !== 'ready' && (
+          <Center style={{ flex: 1 }}>{fallbackContent}</Center>
+        )}
       </Box>
       {bodyState === 'ready' && (
         <Group justify="space-between">

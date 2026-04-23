@@ -109,7 +109,7 @@ function App() {
   )
 
   return (
-    <PageLayout header={<AppHeader title="Event console" badge="demo" />} toolbar={toolbar}>
+    <PageLayout header={<AppHeader title="Events console" badge="demo" />} toolbar={toolbar}>
       {view === 'grid' ? (
         <DataGrid
           rows={isRetrying ? [] : (data ?? [])}
@@ -117,6 +117,7 @@ function App() {
           getRowId={(r) => r.id}
           loading={isLoading || isRetrying}
           error={errorElement}
+          noRowsElement="No events"
           onRowClick={handleRowClick}
           toolbar={viewSwitcher}
         />

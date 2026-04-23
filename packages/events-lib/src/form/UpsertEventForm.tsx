@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Group, LoadingOverlay, Modal, Stack } from '@mantine/core'
+import { Alert, Box, Button, Group, LoadingOverlay, Modal, Stack, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IconAlertTriangle, IconCheck } from '@tabler/icons-react'
 import { FieldInput } from './FieldInput'
@@ -48,7 +48,7 @@ export function UpsertEventForm<T extends Record<string, unknown>>({
     <Modal
       opened
       onClose={onClose}
-      title={title}
+      title={<Title order={4}>{title}</Title>}
       centered
       trapFocus
       returnFocus

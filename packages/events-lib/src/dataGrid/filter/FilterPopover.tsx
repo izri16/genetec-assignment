@@ -38,11 +38,12 @@ export function FilterPopover<T>({ column, value, onChange }: FilterPopoverProps
       <Popover.Target>
         <ActionIcon
           size="sm"
-          variant={active ? 'filled' : 'subtle'}
-          color={active ? 'blue' : 'gray'}
+          variant="subtle"
+          color={active ? undefined : 'gray'}
           onClick={handleToggleOpen}
           aria-label={`Filter by ${column.label}`}
           aria-pressed={active}
+          style={{ opacity: active ? 1 : 0.4 }}
         >
           {active ? <IconFilterFilled size={14} /> : <IconFilter size={14} stroke={1.8} />}
         </ActionIcon>
@@ -73,7 +74,7 @@ export function FilterPopover<T>({ column, value, onChange }: FilterPopoverProps
             />
           )}
           {active && (
-            <Button variant="subtle" size="xs" onClick={handleClear}>
+            <Button variant="subtle" color="gray" size="xs" onClick={handleClear}>
               Clear
             </Button>
           )}

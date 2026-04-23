@@ -65,19 +65,19 @@ export function Timeline<T extends TimelineEvent>({
   let body: ReactNode
   if (error) {
     body = (
-      <Center py="xl" c="red">
+      <Center style={{ flex: 1 }} c="red">
         {error}
       </Center>
     )
   } else if (loading && events.length === 0) {
     body = (
-      <Center py="xl">
+      <Center style={{ flex: 1 }}>
         <Loader size="sm" />
       </Center>
     )
   } else if (days.length === 0) {
     body = (
-      <Center py="xl">
+      <Center style={{ flex: 1 }}>
         <Text c="dimmed">{noEventsElement ?? 'No events'}</Text>
       </Center>
     )
@@ -111,7 +111,7 @@ export function Timeline<T extends TimelineEvent>({
                 <Text fw={500} size="sm" truncate>
                   {formatDayHeader(day.date)}
                 </Text>
-                <Badge size="sm" variant="light" radius="sm">
+                <Badge size="sm" variant="default" radius="sm">
                   {day.events.length}
                 </Badge>
               </Group>

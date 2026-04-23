@@ -4,6 +4,8 @@ import { MantineProvider, createTheme } from '@mantine/core'
 
 const theme = createTheme({
   primaryColor: 'indigo',
+  primaryShade: { light: 6, dark: 4 },
+  autoContrast: true,
   defaultRadius: 'md',
   fontFamily:
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
@@ -18,7 +20,7 @@ const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <MantineProvider defaultColorScheme="auto" theme={theme}>
+    <MantineProvider defaultColorScheme="dark" theme={theme}>
       <QueryClientProvider client={queryClient}>
         <App />
       </QueryClientProvider>
