@@ -49,12 +49,15 @@ export function generateMockEvents(count: number, names: readonly string[]): Eve
   return Array.from({ length: count }, (_, i) => {
     const dayOffset = DAY_OFFSETS[i % DAY_OFFSETS.length]
     const createdAt = addHours(subDays(anchor, dayOffset), i % 24).toISOString()
+    const name = pick(names, i)
+    const location = pick(LOCATIONS, i)
 
     return {
       id: uuidv4(),
       createdAt,
-      name: pick(names, i),
-      location: pick(LOCATIONS, i),
+      name,
+      description: `${name} at ${location}`,
+      location,
       severity: i % SEVERITY_LABELS.length,
       tags: pickTags(i),
     }

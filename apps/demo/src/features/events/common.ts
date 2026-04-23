@@ -13,6 +13,7 @@ export const SEVERITY_LABELS = ['low', 'medium', 'high', 'critical'] as const
 export type SeverityLabel = (typeof SEVERITY_LABELS)[number]
 
 export interface Event extends _Event {
+  description: string
   location: string
   severity: number
   tags: string[]

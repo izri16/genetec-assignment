@@ -12,6 +12,7 @@ import {
 
 export interface EventFormValues extends Record<string, unknown> {
   name: string
+  description: string
   createdAt: string
   location: string
   severity: string
@@ -22,6 +23,7 @@ const toDatetimeLocal = (iso: string) => format(new Date(iso), "yyyy-MM-dd'T'HH:
 
 export const emptyEventForm = (): EventFormValues => ({
   name: '',
+  description: '',
   createdAt: toDatetimeLocal(new Date().toISOString()),
   location: '',
   severity: '',
@@ -30,6 +32,7 @@ export const emptyEventForm = (): EventFormValues => ({
 
 export const eventToForm = (e: Event): EventFormValues => ({
   name: e.name,
+  description: e.description,
   createdAt: toDatetimeLocal(e.createdAt),
   location: e.location,
   severity: severityLabel(e.severity),
@@ -39,6 +42,7 @@ export const eventToForm = (e: Event): EventFormValues => ({
 export const formToEvent = (values: EventFormValues, id?: string): Event => ({
   id: id ?? uuidv4(),
   name: values.name.trim(),
+  description: values.description.trim(),
   createdAt: new Date(values.createdAt).toISOString(),
   location: values.location,
   severity: SEVERITY_LABELS.indexOf(values.severity as SeverityLabel),
@@ -52,6 +56,13 @@ export const eventFormFields: FormField<EventFormValues>[] = [
     type: 'text',
     required: true,
     placeholder: 'e.g. Door forced open',
+  },
+  {
+    key: 'description',
+    label: 'Description',
+    type: 'text',
+    required: true,
+    placeholder: 'Short summary of what happened',
   },
   {
     key: 'createdAt',
