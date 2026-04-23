@@ -4,6 +4,10 @@ Small reusable component library (`DataGrid`, `Timeline`, `UpsertEventForm`) sho
 
 The demo app is meant to loosely evoke a security-ops style dashboard: the user picks an event category (Access / Video / Alarms / Network), browses the events as either a table or a chronological timeline, and can add or edit events via a modal form (in a real-world system events would usually be generated automatically by the underlying devices — the manual form is here to satisfy the assignment's "Add/Edit Event" requirement). It's deliberately lightweight — the goal isn't to be a realistic product, just to put the three lib components into a plausible end-to-end scenario where their loading / empty / error / validation paths all get exercised.
 
+![Grid view](./screenshots/grid-loaded.png)
+
+![Timeline view](./screenshots/timeline-view.png)
+
 ## Project layout
 
 ```
