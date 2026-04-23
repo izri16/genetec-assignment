@@ -24,6 +24,7 @@ export function FieldInput<T>({ field, inputProps, inputRef }: FieldInputProps<T
     label,
     placeholder: field.placeholder,
     name: field.key,
+    autoComplete: 'off',
   }
 
   switch (field.type) {
