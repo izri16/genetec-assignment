@@ -17,7 +17,7 @@ export function PageLayout({ header, toolbar, children }: PageLayoutProps) {
       <Stack gap={0} className={classes.body}>
         {header}
         {toolbar && <Box mt="xl">{toolbar}</Box>}
-        <Box className={classes.content} mt="sm">
+        <Box component="main" className={classes.content} mt="sm">
           {children}
         </Box>
       </Stack>
