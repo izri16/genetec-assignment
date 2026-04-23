@@ -44,7 +44,7 @@ function App() {
   const errorElement = showError ? (
     <Stack align="center" gap="xs">
       <span>{error?.message}</span>
-      <Button size="xs" variant="light" onClick={() => refetch()}>
+      <Button size="xs" variant="subtle" color="gray" onClick={() => refetch()}>
         Retry
       </Button>
     </Stack>
