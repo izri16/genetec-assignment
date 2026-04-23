@@ -28,7 +28,7 @@ pnpm format
 
 ## Screenshots
 
-See [`screenshots/`](./screenshots) for captures of the main states (grid, timeline, form, error), and [this short walkthrough recording](https://drive.google.com/file/d/1Xcs2KIPA1HTdqp1oKo8IwmhRovgdWKoV/view?usp=sharing) for the app in motion.
+See [`screenshots/`](./screenshots) for captures of the main states (grid, timeline, form, error), [this short walkthrough recording](https://drive.google.com/file/d/1Xcs2KIPA1HTdqp1oKo8IwmhRovgdWKoV/view?usp=sharing) for the app in motion, and [this screen-reader recording](https://drive.google.com/file/d/13bgtotVdH5dsCJzi351xrZQ5XjLHWHRf/view?usp=sharing) for the Timeline's accessibility announcements.
 
 ## Demo app behaviour
 
