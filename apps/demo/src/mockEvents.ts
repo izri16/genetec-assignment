@@ -54,7 +54,15 @@ const NAMES_BY_CATEGORY = {
   ],
 } as const
 
-const TAG_POOL = ['access', 'video', 'network', 'badge', 'alarm', 'maintenance', 'audit']
+export const TAG_POOL = [
+  'access',
+  'video',
+  'network',
+  'badge',
+  'alarm',
+  'maintenance',
+  'audit',
+] as const
 
 function pick<T>(arr: readonly T[], seed: number): T {
   return arr[seed % arr.length]
@@ -97,9 +105,18 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   network: 'Network',
 }
 
+// In-memory "backend": mutated by save operations; read by fetchEvents.
+// The Record itself is const, but the arrays inside are swapped on write.
 export const CATEGORY_EVENTS: Record<Category, Event[]> = {
   access: generateMockEvents(120, NAMES_BY_CATEGORY.access),
   video: generateMockEvents(80, NAMES_BY_CATEGORY.video),
   alarms: [],
   network: [],
+}
+
+export function upsertEvent(category: Category, event: Event, isEdit: boolean): void {
+  const list = CATEGORY_EVENTS[category]
+  CATEGORY_EVENTS[category] = isEdit
+    ? list.map((e) => (e.id === event.id ? event : e))
+    : [event, ...list]
 }

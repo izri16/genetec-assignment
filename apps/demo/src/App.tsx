@@ -9,18 +9,22 @@ import {
   Title,
 } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
+import { format } from 'date-fns'
 import { useState } from 'react'
-import { DataGrid, type Column } from 'events-lib'
+import { v4 as uuidv4 } from 'uuid'
+import { DataGrid, UpsertEventForm, type Column, type FormField } from 'events-lib'
 import {
   CATEGORIES,
   CATEGORY_LABELS,
   LOCATIONS,
   SEVERITY_LABELS,
+  TAG_POOL,
   severityLabel,
   type Category,
   type Event,
+  type SeverityLabel,
 } from './mockEvents'
-import { useEventsQuery } from './useEventsQuery'
+import { useEventsQuery, useUpsertEventMutation } from './useEventsQuery'
 
 // Case-insensitive, deterministic string compare. Not locale-aware.
 const byString =
@@ -45,7 +49,6 @@ const columns: Column<Event>[] = [
     key: 'createdAt',
     label: 'Created',
     accessor: (r) => new Date(r.createdAt).toLocaleString(),
-    // ISO 8601 strings sort chronologically as plain strings.
     compare: byString((r) => r.createdAt),
     width: 180,
   },
@@ -82,6 +85,54 @@ const columns: Column<Event>[] = [
   },
 ]
 
+interface EventFormValues extends Record<string, unknown> {
+  name: string
+  createdAt: string
+  location: string
+  severity: string
+  tags: string[]
+}
+
+const emptyForm = (): EventFormValues => ({
+  name: '',
+  createdAt: toDatetimeLocal(new Date().toISOString()),
+  location: '',
+  severity: '',
+  tags: [],
+})
+
+const eventFields: FormField<EventFormValues>[] = [
+  {
+    key: 'name',
+    label: 'Name',
+    type: 'text',
+    required: true,
+    placeholder: 'e.g. Door forced open',
+  },
+  {
+    key: 'createdAt',
+    label: 'Created at',
+    type: 'datetime',
+    required: true,
+    // An event can't be logged as occurring in the future.
+    validate: (v) =>
+      new Date(v as string).getTime() > Date.now() ? 'Cannot be in the future' : null,
+  },
+  { key: 'location', label: 'Location', type: 'select', required: true, options: LOCATIONS },
+  { key: 'severity', label: 'Severity', type: 'select', required: true, options: SEVERITY_LABELS },
+  { key: 'tags', label: 'Tags', type: 'multiselect', options: TAG_POOL },
+]
+
+const toDatetimeLocal = (iso: string) => format(new Date(iso), "yyyy-MM-dd'T'HH:mm")
+
+const eventToForm = (e: Event): EventFormValues => ({
+  name: e.name,
+  createdAt: toDatetimeLocal(e.createdAt),
+  location: e.location,
+  severity: severityLabel(e.severity),
+  tags: e.tags,
+})
+
 type View = 'grid' | 'timeline'
 
 const CATEGORY_OPTIONS = CATEGORIES.map((c) => ({ value: c, label: CATEGORY_LABELS[c] }))
@@ -93,7 +144,10 @@ const VIEW_OPTIONS = [
 function App() {
   const [category, setCategory] = useState<Category>('access')
   const [view, setView] = useState<View>('grid')
+  const [editing, setEditing] = useState<Event | null>(null)
+  const [formOpen, setFormOpen] = useState(false)
   const { data, isLoading, isFetching, isError, error, refetch } = useEventsQuery(category)
+  const upsertEvent = useUpsertEventMutation(category)
 
   // Suppress the error fallback while a retry is in flight — otherwise the
   // grid flickers between cached data and the error message.
@@ -110,11 +164,25 @@ function App() {
   ) : undefined
 
   const handleNewEvent = () => {
-    // TODO: open Add Event form
+    setEditing(null)
+    setFormOpen(true)
   }
 
-  const handleRowClick = () => {
-    // TODO: open Edit Event form
+  const handleRowClick = (row: Event) => {
+    setEditing(row)
+    setFormOpen(true)
+  }
+
+  const handleSave = async (values: EventFormValues) => {
+    const event: Event = {
+      id: editing?.id ?? uuidv4(),
+      name: values.name.trim(),
+      createdAt: new Date(values.createdAt).toISOString(),
+      location: values.location,
+      severity: SEVERITY_LABELS.indexOf(values.severity as SeverityLabel),
+      tags: values.tags,
+    }
+    await upsertEvent.mutateAsync({ event, isEdit: !!editing })
   }
 
   return (
@@ -155,6 +223,16 @@ function App() {
           </Paper>
         )}
       </Stack>
+      {formOpen && (
+        <UpsertEventForm
+          onClose={() => setFormOpen(false)}
+          title={editing ? 'Edit event' : 'New event'}
+          fields={eventFields}
+          initialValues={editing ? eventToForm(editing) : emptyForm()}
+          onSave={handleSave}
+          successMessage={editing ? 'Event updated' : 'Event created'}
+        />
+      )}
     </Container>
   )
 }
