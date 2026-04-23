@@ -15,6 +15,7 @@ export function EventCard({ isFocused, onClick, children }: Props) {
       onClick={onClick}
       data-focused={isFocused || undefined}
       style={{
+        position: 'relative',
         cursor: onClick ? 'pointer' : undefined,
         background: isFocused ? 'var(--mantine-color-blue-light)' : undefined,
         borderColor: isFocused ? 'var(--mantine-color-blue-filled)' : undefined,

@@ -1,4 +1,4 @@
-import { Box, Button, Group, SegmentedControl, Stack, Text } from '@mantine/core'
+import { Button, Group, SegmentedControl, Stack } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
 import { DataGrid, Timeline, UpsertEventForm } from 'events-lib'
@@ -12,29 +12,13 @@ import {
   eventFormFields,
   eventToForm,
   formToEvent,
-  SeverityBadge,
+  TimelineEventCard,
   useEventsQuery,
   useUpsertEventMutation,
   type Category,
   type Event,
   type EventFormValues,
 } from './features/events'
-
-const truncate = { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } as const
-
-const renderEventCard = (e: Event) => (
-  <Stack gap={4}>
-    <Text size="sm" fw={600} style={truncate}>
-      {e.name}
-    </Text>
-    <Text size="xs" c="dimmed" style={truncate}>
-      {e.location}
-    </Text>
-    <Box style={{ alignSelf: 'flex-start' }}>
-      <SeverityBadge severity={e.severity} />
-    </Box>
-  </Stack>
-)
 
 type View = 'grid' | 'timeline'
 
@@ -123,10 +107,9 @@ function App() {
           events={(isRetrying ? [] : (data ?? [])).map((e) => ({ ...e, date: e.createdAt }))}
           getEventId={(e) => e.id}
           getEventLabel={(e) => e.name}
-          renderEvent={renderEventCard}
+          renderEvent={(e) => <TimelineEventCard event={e} onEdit={handleRowClick} />}
           loading={isLoading || isRetrying}
           error={errorElement}
-          onEventClick={handleRowClick}
           toolbar={viewSwitcher}
         />
       )}

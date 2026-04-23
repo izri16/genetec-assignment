@@ -118,5 +118,5 @@ export function useTimelineNavigation({ days, page, totalPages, setPage }: Param
     return () => document.removeEventListener('keydown', onKey)
   }, [safeFocusPosition, days, page, totalPages, setPage])
 
-  return { focusPosition: safeFocusPosition }
+  return { focusPosition: safeFocusPosition, setFocusPosition }
 }

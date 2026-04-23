@@ -19,7 +19,6 @@ export interface TimelineProps<T extends TimelineEvent> {
   loading?: boolean
   error?: ReactNode
   noEventsElement?: ReactNode
-  onEventClick?: (event: T) => void
   toolbar?: ReactNode
 }
 
@@ -35,13 +34,17 @@ export function Timeline<T extends TimelineEvent>({
   loading = false,
   error,
   noEventsElement,
-  onEventClick,
   toolbar,
 }: TimelineProps<T>) {
   const eventsByDay = useMemo(() => groupEventsByDay(events), [events])
   const { pageRows: days, page, setPage, totalPages } = usePagination(eventsByDay, daysPerPage)
 
-  const { focusPosition } = useTimelineNavigation({ days, page, totalPages, setPage })
+  const { focusPosition, setFocusPosition } = useTimelineNavigation({
+    days,
+    page,
+    totalPages,
+    setPage,
+  })
 
   const focusedDay = days[focusPosition.dayIndex]
   const focusedEvent = focusedDay?.events[focusPosition.eventIndex]
@@ -123,7 +126,7 @@ export function Timeline<T extends TimelineEvent>({
                 isFocused={
                   focusPosition.dayIndex === dayIdx && focusPosition.eventIndex === eventIdx
                 }
-                onClick={onEventClick ? () => onEventClick(event) : undefined}
+                onClick={() => setFocusPosition({ dayIndex: dayIdx, eventIndex: eventIdx })}
               >
                 {renderEvent(event)}
               </EventCard>
