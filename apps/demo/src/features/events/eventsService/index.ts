@@ -23,18 +23,16 @@ export function fetchEvents(category: Category): Promise<Event[]> {
   })
 }
 
-// Simulated save endpoint: 500ms latency, every 4th call fails so the form
-// can exercise its error branch without flaky determinism.
-let saveCallCount = 0
-
+// Simulated save endpoint: 500ms latency. The alarms category always fails
+// (same "endpoint is down" story as the fetch above) so the form's error
+// branch is deterministic to demo without being flaky for other categories.
 export async function upsertEvent(
   category: Category,
   event: Event,
   isEdit: boolean,
 ): Promise<Event> {
   await new Promise((r) => window.setTimeout(r, 500))
-  saveCallCount++
-  if (saveCallCount % 4 === 0) {
+  if (category === 'alarms') {
     throw new Error('Save failed. Please try again.')
   }
   return serverMemory.upsert(category, event, isEdit)
