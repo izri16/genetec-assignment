@@ -9,7 +9,7 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import { IconPlus } from '@tabler/icons-react'
+import { IconActivity, IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -189,7 +189,35 @@ function App() {
   return (
     <Container size="xl" py="lg" h="100%" style={{ display: 'flex', flexDirection: 'column' }}>
       <Stack gap="md" style={{ flex: 1, minHeight: 0 }}>
-        <Title order={1}>Event console</Title>
+        <Group gap="sm" align="center">
+          <Box
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'var(--mantine-color-indigo-6)',
+              color: '#fff',
+            }}
+          >
+            <IconActivity size={20} stroke={2.2} />
+          </Box>
+          <Title order={2} lh={1}>
+            Event console
+          </Title>
+          <Text
+            size="xs"
+            c="dimmed"
+            fw={600}
+            tt="uppercase"
+            lh={1}
+            style={{ letterSpacing: 0.6, alignSelf: 'center', marginTop: 4 }}
+          >
+            demo
+          </Text>
+        </Group>
         <Group justify="space-between" wrap="wrap">
           <Group gap="sm">
             <SegmentedControl
