@@ -47,6 +47,10 @@ Data is fully in-memory — mutations are kept in a module-scoped store so edits
 
 **Grid sizing**: column widths and spacing in the `DataGrid` are a first pass — more care could be given to fluid sizing across viewport widths (proportional columns, min/max constraints, better truncation behaviour). Left as-is to keep the focus on component behaviour rather than pixel polish.
 
+## File structure
+
+Folders are grouped by **feature / concern**, not by technical category. You'll see `dataGrid/filter`, `dataGrid/sort`, `dataGrid/pagination`, `timeline/navigation`, `timeline/grouping` — each folder colocates the hook, the pure logic, the UI, the styles, and the test that belong together. I specifically avoid top-level `hooks/`, `utils/`, `types/` folders: those split things that change together into different places and make it harder to see what a feature actually consists of.
+
 ## Tech choices
 
 - **Mantine** for UI primitives. It's lighter than MUI, and much faster to get going with than pure Tailwind or Radix + Tailwind while still giving a polished baseline. Good fit for a small showcase.
