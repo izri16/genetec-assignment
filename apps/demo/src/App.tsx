@@ -231,6 +231,7 @@ function App() {
           initialValues={editing ? eventToForm(editing) : emptyForm()}
           onSave={handleSave}
           successMessage={editing ? 'Event updated' : 'Event created'}
+          isEditing={!!editing}
         />
       )}
     </Container>

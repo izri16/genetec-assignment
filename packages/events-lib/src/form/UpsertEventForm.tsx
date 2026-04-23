@@ -13,6 +13,7 @@ export interface UpsertEventFormProps<T> {
   initialValues: T
   onSave: (values: T) => void | Promise<void>
   successMessage?: string
+  isEditing?: boolean
 }
 
 export function UpsertEventForm<T extends Record<string, unknown>>({
@@ -22,11 +23,13 @@ export function UpsertEventForm<T extends Record<string, unknown>>({
   initialValues,
   onSave,
   successMessage = 'Saved',
+  isEditing = false,
 }: UpsertEventFormProps<T>) {
   const form = useForm<T>({
     initialValues,
     validate: buildValidators(fields),
   })
+  const unchanged = isEditing && !form.isDirty()
   const { submit, submitting, saved, error: submitError } = useAsyncSubmit<T>(onSave)
 
   const handleSubmit = form.onSubmit(
@@ -80,7 +83,7 @@ export function UpsertEventForm<T extends Record<string, unknown>>({
                 <Button variant="default" onClick={onClose} type="button">
                   Cancel
                 </Button>
-                <Button type="submit" loading={submitting}>
+                <Button type="submit" loading={submitting} disabled={unchanged}>
                   {submitError ? 'Retry' : 'Save'}
                 </Button>
               </Group>
