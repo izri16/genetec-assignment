@@ -26,6 +26,10 @@ pnpm lint
 pnpm format
 ```
 
+## Screenshots
+
+See [`screenshots/`](./screenshots) for captures of the main states (grid, timeline, form, error).
+
 ## Demo app behaviour
 
 The app has a category switcher (`Access / Video / Alarms / Network`) and a view switcher (`Grid / Timeline`) — both views render the same underlying event list for the selected category, so switching views is always a different presentation of the same data. Each category intentionally simulates a different backend characteristic, so the lib's loading / empty / error states are exercised by real interactions rather than toggle buttons:
