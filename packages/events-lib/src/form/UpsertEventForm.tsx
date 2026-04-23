@@ -1,6 +1,7 @@
 import { Alert, Box, Button, Group, LoadingOverlay, Modal, Stack, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IconAlertTriangle, IconCheck } from '@tabler/icons-react'
+import { useRef } from 'react'
 import { FieldInput } from './FieldInput'
 import type { FormField } from './fields'
 import { useAsyncSubmit } from './useAsyncSubmit'
@@ -31,16 +32,15 @@ export function UpsertEventForm<T extends Record<string, unknown>>({
   })
   const unchanged = isEditing && !form.isDirty()
   const { submit, submitting, saved, error: submitError } = useAsyncSubmit<T>(onSave)
+  const fieldRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
   const handleSubmit = form.onSubmit(
     (values) => submit(values as T),
+    // eslint-disable-next-line react-hooks/refs -- runs on submit event, not render
     (errors) => {
       // Focus the first invalid field in declaration order.
       const firstInvalid = fields.find((f) => errors[f.key])?.key
-      if (firstInvalid) {
-        const el = document.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)
-        el?.focus()
-      }
+      if (firstInvalid) fieldRefs.current[firstInvalid]?.focus()
     },
   )
 
@@ -80,6 +80,9 @@ export function UpsertEventForm<T extends Record<string, unknown>>({
                   key={field.key}
                   field={field}
                   inputProps={form.getInputProps(field.key)}
+                  inputRef={(el) => {
+                    fieldRefs.current[field.key] = el
+                  }}
                 />
               ))}
               {submitError && (
