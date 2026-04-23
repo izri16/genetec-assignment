@@ -1,4 +1,4 @@
-import { Button, Group, SegmentedControl, Stack, Text } from '@mantine/core'
+import { Box, Button, Group, SegmentedControl, Stack, Text } from '@mantine/core'
 import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
 import { DataGrid, Timeline, UpsertEventForm } from 'events-lib'
@@ -12,7 +12,7 @@ import {
   eventFormFields,
   eventToForm,
   formToEvent,
-  severityLabel,
+  SeverityBadge,
   useEventsQuery,
   useUpsertEventMutation,
   type Category,
@@ -23,19 +23,16 @@ import {
 const truncate = { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } as const
 
 const renderEventCard = (e: Event) => (
-  <Stack gap={2}>
+  <Stack gap={4}>
     <Text size="sm" fw={600} style={truncate}>
       {e.name}
     </Text>
     <Text size="xs" c="dimmed" style={truncate}>
       {e.location}
     </Text>
-    <Text size="xs" c="dimmed" style={truncate}>
-      {severityLabel(e.severity)}
-    </Text>
-    <Text size="xs" c="dimmed" style={truncate}>
-      {e.tags.join(', ')}
-    </Text>
+    <Box style={{ alignSelf: 'flex-start' }}>
+      <SeverityBadge severity={e.severity} />
+    </Box>
   </Stack>
 )
 

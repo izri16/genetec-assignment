@@ -1,6 +1,7 @@
 export * from './common'
 export * from './eventColumns'
 export * from './eventForm'
+export * from './SeverityBadge'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { type Category, type Event } from './common'

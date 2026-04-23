@@ -1,9 +1,10 @@
 import type { Column } from 'events-lib'
 import { LOCATIONS, SEVERITY_LABELS, severityLabel, type Event } from './common'
+import { SeverityBadge } from './SeverityBadge'
 
 // Case-insensitive, deterministic string compare. Not locale-aware.
 const byString =
-  <T>(get: (row: T) => string) =>
+  <T,>(get: (row: T) => string) =>
   (a: T, b: T) => {
     const x = get(a).toLowerCase()
     const y = get(b).toLowerCase()
@@ -46,7 +47,7 @@ export const eventColumns: Column<Event>[] = [
   {
     key: 'severity',
     label: 'Severity',
-    accessor: (r) => severityLabel(r.severity),
+    accessor: (r) => <SeverityBadge severity={r.severity} />,
     compare: (a, b) => a.severity - b.severity,
     width: 150,
     filterOn: (r) => severityLabel(r.severity),

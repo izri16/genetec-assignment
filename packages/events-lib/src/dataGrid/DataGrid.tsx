@@ -175,9 +175,7 @@ export function DataGrid<T>({
             </Table.Tbody>
           )}
         </Table>
-        {bodyState !== 'ready' && (
-          <Center style={{ flex: 1 }}>{fallbackContent}</Center>
-        )}
+        {bodyState !== 'ready' && <Center style={{ flex: 1 }}>{fallbackContent}</Center>}
       </Box>
       {bodyState === 'ready' && (
         <Group justify="space-between">
