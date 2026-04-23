@@ -45,7 +45,15 @@ export function UpsertEventForm<T extends Record<string, unknown>>({
   )
 
   return (
-    <Modal opened onClose={onClose} title={title} centered trapFocus returnFocus>
+    <Modal
+      opened
+      onClose={onClose}
+      title={title}
+      centered
+      trapFocus
+      returnFocus
+      closeOnClickOutside={false}
+    >
       {saved ? (
         <Stack gap="sm">
           <Alert color="green" icon={<IconCheck size={16} />} role="status">
