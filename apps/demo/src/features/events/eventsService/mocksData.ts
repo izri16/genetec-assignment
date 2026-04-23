@@ -62,8 +62,8 @@ export function generateMockEvents(count: number, names: readonly string[]): Eve
 }
 
 export const SEED_EVENTS: Record<Category, Event[]> = {
-  access: generateMockEvents(120, NAMES_BY_CATEGORY.access),
-  video: generateMockEvents(80, NAMES_BY_CATEGORY.video),
+  access: generateMockEvents(100, NAMES_BY_CATEGORY.access),
+  video: generateMockEvents(100, NAMES_BY_CATEGORY.video),
   alarms: [],
   network: [],
 }
