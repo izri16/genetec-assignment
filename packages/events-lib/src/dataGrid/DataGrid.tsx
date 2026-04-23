@@ -111,7 +111,15 @@ export function DataGrid<T>({
           overlayProps={{ backgroundOpacity: 0.15 }}
           loaderProps={{ size: 'sm' }}
         />
-        <Table striped highlightOnHover withTableBorder withColumnBorders layout="fixed" miw={900}>
+        <Table
+          striped
+          highlightOnHover
+          withTableBorder
+          withColumnBorders
+          layout="fixed"
+          miw={900}
+          stickyHeader
+        >
           <colgroup>
             {visibleColumns.map((col) => (
               <col key={col.key} style={col.width != null ? { width: col.width } : undefined} />
